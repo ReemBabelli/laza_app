@@ -41,7 +41,8 @@ class MyRouter1 {
   static const wishList = 'wishList';
   static const cart = 'cart';
 
-  static GoRouter router = GoRouter(routes: [
+  static GoRouter router = GoRouter(
+      routes: [
     GoRoute(
       path: '/',
       name: splash,
@@ -85,130 +86,116 @@ class MyRouter1 {
                                     builder: (context, state) {
                                       return const ForgotPasswordScreen();
                                     },
-                                    routes: [
-                                      GoRoute(
-                                          path: verification,
-                                          name: verification,
-                                          builder: (context, state) {
-                                            return const VerificationScreen();
-                                          },
-                                          routes: [
-                                            GoRoute(
-                                                path: newPassword,
-                                                name: newPassword,
-                                                builder: (context, state) {
-                                                  return const NewPasswordScreen();
-                                                })
-                                          ])
-                                    ]),
+                                ),//forgotPassword
                                 GoRoute(
-                                    path: home,
-                                    name: home,
+                                    path: verification,
+                                    name: verification,
                                     builder: (context, state) {
-                                      return const HomeScreen();
+                                      return const VerificationScreen();
                                     },
                                     routes: [
                                       GoRoute(
-                                        path: search,
-                                        name: search,
+                                        path: newPassword,
+                                        name: newPassword,
                                         builder: (context, state) {
-                                          return const SearchScreen();
+                                          return const NewPasswordScreen();
                                         },
-                                      ),//search
-                                      GoRoute(
-                                          path: cart,
-                                          name: cart,
-                                          builder: (context, state) {
-                                            return const CartScreen();
-                                          }),//cart
-                                      GoRoute(
-                                          path: resetPassword,
-                                          name: resetPassword,
-                                          builder: (context, state) {
-                                            return const ResetPasswordScreen();
-                                          },
-                                          routes: [
-                                            GoRoute(
-                                                path: verification,
-                                                name: verification,
-                                                builder: (context, state) {
-                                                  return const VerificationScreen();
-                                                },
-                                                routes: [
-                                                  GoRoute(
-                                                      path: newPassword,
-                                                      name: newPassword,
-                                                      builder: (context, state) {
-                                                        return const NewPasswordScreen();
-                                                      })
-                                                ])
-                                          ]),//resetPassword
-                                      GoRoute(
-                                          path: wishList,
-                                          name: wishList,
-                                          builder: (context, state) {
-                                            return const WishlistScreen();
-                                          }),//wishList
-                                      GoRoute(
-                                          path: brands,
-                                          name: brands,
-                                          builder: (context, state) {
-                                            return BrandsScreen(brands: state.extra as BrandsModel);
-                                          },
-                                      routes: [
-                                        GoRoute(
-                                            path: "$brand/:brandImage",
-                                            name: brand,
-                                            builder: (context, state) {
-                                              return BrandScreen(
-                                                  brandImage:
-                                                  state.pathParameters[
-                                                  'brandImage']!,
-                                                  productsEntity: state.extra
-                                                  as ProductsEntity);
-                                            },
-                                        routes: [
-                                          GoRoute(
-                                              path: productDetails,
-                                              name: productDetails,
-                                              builder: (context, state) {
-                                                return ProductDetailsScreen(
-                                                  productEntity:
-                                                  state.extra as ProductEntity,
-                                                );
-                                              },
-                                              routes: [
-                                                GoRoute(
-                                                    path: reviews,
-                                                    name: reviews,
-                                                    builder: (context, state) {
-                                                      return ReviewsScreen(
-                                                        productEntity: state.extra
-                                                        as ProductEntity,
-                                                      );
-                                                    },
-                                                    routes: [
-                                                      GoRoute(
-                                                          path: addingReview,
-                                                          name: addingReview,
-                                                          builder:
-                                                              (context, state) {
-                                                            return AddingReviewScreen(
-                                                              productEntity: state
-                                                                  .extra
-                                                              as ProductEntity,
-                                                            );
-                                                          })
-                                                    ])
-                                              ]),
-                                        ]),
-                                      ]),
 
-
+                                      )
                                     ])
+
                               ])
                         ])
                   ])
+            ]),
+        GoRoute(
+            path: home,
+            name: home,
+            builder: (context, state) {
+              return const HomeScreen();
+            },
+            routes: [
+              GoRoute(
+                path: search,
+                name: search,
+                builder: (context, state) {
+                  return const SearchScreen();
+                },
+              ),//search
+              GoRoute(
+                  path: cart,
+                  name: cart,
+                  builder: (context, state) {
+                    return const CartScreen();
+                  }),//cart
+              GoRoute(
+                path: resetPassword,
+                name: resetPassword,
+                builder: (context, state) {
+                  return const ResetPasswordScreen();
+                },
+              ),//resetPassword
+              GoRoute(
+                  path: wishList,
+                  name: wishList,
+                  builder: (context, state) {
+                    return const WishlistScreen();
+                  }),//wishList
+              GoRoute(
+                  path: brands,
+                  name: brands,
+                  builder: (context, state) {
+                    return BrandsScreen(brands: state.extra as BrandsModel);
+                  },
+              ),//brands
+              GoRoute(
+                path: "$brand/:brandImage",
+                name: brand,
+                builder: (context, state) {
+                  return BrandScreen(
+                      brandImage:
+                      state.pathParameters[
+                      'brandImage']!,
+                      productsEntity: state.extra
+                      as ProductsEntity);
+                },
+
+              ),//brand
+              GoRoute(
+                  path: productDetails,
+                  name: productDetails,
+                  builder: (context, state) {
+                    return ProductDetailsScreen(
+                      productEntity:
+                      state.extra as ProductEntity,
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                        path: reviews,
+                        name: reviews,
+                        builder: (context, state) {
+                          return ReviewsScreen(
+                            productEntity: state.extra
+                            as ProductEntity,
+                          );
+                        },
+                        routes: [
+                          GoRoute(
+                              path: addingReview,
+                              name: addingReview,
+                              builder:
+                                  (context, state) {
+                                return AddingReviewScreen(
+                                  productEntity: state
+                                      .extra
+                                  as ProductEntity,
+                                );
+                              })
+                        ])
+                  ]),//product
+
+
             ])
       ],
     ),
