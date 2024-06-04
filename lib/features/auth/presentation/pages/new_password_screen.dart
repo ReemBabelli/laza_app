@@ -31,11 +31,8 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
         child: BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthSignInSuccessState) {
-          final username = state.username;
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text("The password has been changed successfully")));
-          // Navigator.of(context)
-          //     .push(MaterialPageRoute(builder: (_) =>  HomeScreen(username: username,)));
           context.goNamed(MyRouter2.home);
         } else if (state is AuthErrorState) {
           ScaffoldMessenger.of(context)

@@ -32,8 +32,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
         if (state is AuthSuccessState) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text("Your email has been successfully verified")));
-          // Navigator.of(context).push(
-          //     MaterialPageRoute(builder: (_) => const NewPasswordScreen()));
           context.goNamed(MyRouter2.newPassword);
         } else if (state is AuthErrorState) {
           ScaffoldMessenger.of(context)

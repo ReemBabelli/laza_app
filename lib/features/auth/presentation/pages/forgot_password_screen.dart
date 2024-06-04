@@ -32,8 +32,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         if(state is AuthSuccessState){
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text("The verification code was received, check your email")));
-          // Navigator.of(context).push(
-          //     MaterialPageRoute(builder: (_) => const VerificationScreen()));
           context.goNamed(MyRouter2.verification);
         } else if(state is AuthErrorState){
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errMessage)));
