@@ -55,7 +55,7 @@ class _StarterScreenState extends State<StarterScreen> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    VerticalSpace(1),
+                    const VerticalSpace(1),
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(3.0),
@@ -72,7 +72,7 @@ class _StarterScreenState extends State<StarterScreen> {
 
                       ),
                     ),
-                    Spacer()
+                    const Spacer()
                   ],
                 ),
               ),
