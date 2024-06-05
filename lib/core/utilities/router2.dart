@@ -1,6 +1,5 @@
 import 'package:go_router/go_router.dart';
 import 'package:laza_app/core/screens/starter_screen.dart';
-import 'package:laza_app/features/auth/data/data_sources/user_local_data_source.dart';
 import 'package:laza_app/features/auth/presentation/pages/forgot_password_screen.dart';
 import 'package:laza_app/features/auth/presentation/pages/new_password_screen.dart';
 import 'package:laza_app/features/auth/presentation/pages/reset_password_screen.dart';
@@ -20,8 +19,6 @@ import 'package:laza_app/core/screens/splash_screen.dart';
 import 'package:laza_app/features/auth/presentation/pages/wishlist_screen.dart';
 import 'package:laza_app/features/auth/presentation/pages/cart_screen.dart';
 import 'package:laza_app/features/products/presentation/pages/search_screen.dart';
-import 'package:laza_app/injection_container.dart' as di;
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 class MyRouter2 {
@@ -114,7 +111,7 @@ class MyRouter2 {
       path: "/$home",
       name: home,
       builder: (context, state) {
-        return HomeScreen();
+        return const HomeScreen();
       },
       routes: [
         GoRoute(
