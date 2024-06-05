@@ -43,10 +43,10 @@ class _CartScreenState extends State<CartScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ErrorMessageWidget(errMessage: state.errMessage),
-                    VerticalSpace(2),
+                    const VerticalSpace(2),
                     CircleAvatar(
                       child: IconButton(
-                        icon: Icon(Icons.refresh),
+                        icon: const Icon(Icons.refresh),
                         color: Theme.of(context).colorScheme.secondary,
                         onPressed: () {
                           context.read<AuthBloc>().add(GetProfileEvent());
