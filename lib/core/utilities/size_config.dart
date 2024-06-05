@@ -14,7 +14,5 @@ class SizeConfig {
     defaultSize = orientation == Orientation.landscape
         ? screenHeight! * 0.024
         : screenWidth! * 0.024;
-
-    print('default size : $defaultSize');
   }
 }
