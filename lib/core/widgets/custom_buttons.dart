@@ -35,6 +35,52 @@ class _BottomButtonState extends State<BottomButton> {
 }
 //******************************************************************************
 
+class CartBottomButton extends StatefulWidget {
+  final bool isExistInCart;
+  final String text1;
+  final String text2;
+  final void Function() onPressed;
+
+  const CartBottomButton(
+      {super.key,
+      required this.text1,
+      required this.onPressed,
+      required this.isExistInCart,
+        required this.text2});
+
+  @override
+  State<CartBottomButton> createState() => _CartBottomButtonState();
+}
+
+class _CartBottomButtonState extends State<CartBottomButton> {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: widget.onPressed,
+      child: Container(
+        height: SizeConfig.defaultSize! * 9,
+        width: SizeConfig.screenWidth,
+        decoration: const BoxDecoration(color: mainColor),
+        child: Center(
+          child: AnimatedCrossFade(
+            firstChild:Text(
+              widget.text1,
+              style: getWhiteText17(context),
+            ),
+            secondChild: Text(
+              widget.text2,
+              style: getWhiteText17(context),
+            ),
+            crossFadeState: widget.isExistInCart ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+            duration: Duration(milliseconds: 500),
+          ),
+        ),
+      ),
+    );
+  }
+}
+//******************************************************************************
+
 class GeneralButton extends StatefulWidget {
   final double? width;
   final double? height;
@@ -64,12 +110,12 @@ class _GeneralButtonState extends State<GeneralButton> {
     return InkWell(
       onTap: widget.onPressed,
       child: Container(
-          width: widget.width ?? SizeConfig.defaultSize! * 35,
-          height: widget.height ?? SizeConfig.defaultSize! * 5,
-          decoration: BoxDecoration(
-            color: widget.color,
-            borderRadius: BorderRadius.circular(15),
-          ),
+        width: widget.width ?? SizeConfig.defaultSize! * 35,
+        height: widget.height ?? SizeConfig.defaultSize! * 5,
+        decoration: BoxDecoration(
+          color: widget.color,
+          borderRadius: BorderRadius.circular(15),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -80,7 +126,7 @@ class _GeneralButtonState extends State<GeneralButton> {
             )
           ],
         ),
-          ),
+      ),
     );
   }
 }
@@ -106,8 +152,7 @@ class _CustomTextButtonState extends State<CustomTextButton> {
         child: Text(widget.text,
             style: widget.textStyle ??
                 // getBlackText17b(context)
-                Theme.of(context).textTheme.titleLarge
-        ));
+                Theme.of(context).textTheme.titleLarge));
   }
 }
 
@@ -121,11 +166,17 @@ class SideBarButton extends StatefulWidget {
   final void Function() onPressed;
 
   const SideBarButton(
-      {super.key, required this.image, required this.text, this.suffix, this.textStyle, required this.onPressed});
+      {super.key,
+      required this.image,
+      required this.text,
+      this.suffix,
+      this.textStyle,
+      required this.onPressed});
 
   @override
   State<SideBarButton> createState() => _SideBarButtonState();
 }
+
 class _SideBarButtonState extends State<SideBarButton> {
   @override
   Widget build(BuildContext context) {
@@ -142,8 +193,8 @@ class _SideBarButtonState extends State<SideBarButton> {
           width: 10,
         ),
         Text(
-          widget.text ,
-          style:widget.textStyle??
+          widget.text,
+          style: widget.textStyle ??
               // getBlackText15(context),
               Theme.of(context).textTheme.labelLarge,
         ),

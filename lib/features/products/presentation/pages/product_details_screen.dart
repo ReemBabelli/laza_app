@@ -6,7 +6,6 @@ import 'package:laza_app/core/theme/theme_utilities/colors.dart';
 import 'package:laza_app/core/utilities/router2.dart';
 import 'package:laza_app/core/utilities/size_config.dart';
 import 'package:laza_app/core/widgets/custom_buttons.dart';
-import 'package:laza_app/core/widgets/error_message_widget.dart';
 import 'package:laza_app/core/widgets/space_widget.dart';
 import 'package:laza_app/features/auth/presentation/manager/auth_bloc.dart';
 import 'package:laza_app/features/auth/presentation/manager/auth_event.dart';
@@ -22,15 +21,37 @@ class ProductDetailsScreen extends StatefulWidget {
 
   // final String isAddedToWishList;
 
-  const ProductDetailsScreen(
-      {super.key, required this.productEntity,});
+  const ProductDetailsScreen({
+    super.key,
+    required this.productEntity,
+  });
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
-class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+class _ProductDetailsScreenState extends State<ProductDetailsScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+  late int currentImage;
+  late int previousImage;
   int selectedIndex = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    currentImage = 1;
+    previousImage = 1;
+    animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    animationController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     late bool isExistInCart = false;
@@ -41,18 +62,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     context
         .read<ProductBloc>()
         .add(IsExistInWishlistEvent(productId: widget.productEntity.productId));
-context.read<AuthBloc>().add(GetProfileEvent());
+    context.read<AuthBloc>().add(GetProfileEvent());
     return BlocConsumer<ProductBloc, ProductState>(listener: (context, state) {
       if (state is SuccessState) {
         context.read<AuthBloc>().add(GetProfileEvent());
         context
             .read<ProductBloc>()
             .add(IsExistInCartEvent(productId: widget.productEntity.productId));
-        context
-            .read<ProductBloc>()
-            .add(IsExistInWishlistEvent(productId: widget.productEntity.productId));
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(duration: Duration(seconds: 2),content: Text(state.sucMessage)));
+        context.read<ProductBloc>().add(
+            IsExistInWishlistEvent(productId: widget.productEntity.productId));
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //     duration: Duration(seconds: 2), content: Text(state.sucMessage)));
       } else if (state is IsExistInCartState) {
         isExistInCart = state.isExists;
       } else if (state is IsExistInWishlistState) {
@@ -70,11 +90,29 @@ context.read<AuthBloc>().add(GetProfileEvent());
                   Container(
                       color: dirtyWhiteColor,
                       child: Image.network(
-                        widget.productEntity.productImages[selectedIndex].url!,
+                        // widget.productEntity.productImages[selectedIndex].url!,
+                        widget.productEntity.productImages[previousImage].url!,
                         fit: BoxFit.cover,
                         width: SizeConfig.screenWidth,
                         height: SizeConfig.screenWidth,
                       )),
+                  AnimatedBuilder(
+                      animation: animationController,
+                      builder: (context, _) {
+                        return ClipPath(
+                          clipper: CustomPath(value: animationController.value),
+                          child: Container(
+                              color: dirtyWhiteColor,
+                              child: Image.network(
+                                // widget.productEntity.productImages[selectedIndex].url!,
+                                widget.productEntity.productImages[currentImage]
+                                    .url!,
+                                fit: BoxFit.cover,
+                                width: SizeConfig.screenWidth,
+                                height: SizeConfig.screenWidth,
+                              )),
+                        );
+                      }),
                   Positioned(
                     top: 30,
                     left: 30,
@@ -159,12 +197,18 @@ context.read<AuthBloc>().add(GetProfileEvent());
                                     height: 80,
                                   ),
                                 ),
-                            // Inside the InkWell widget onTap callback
-                            onTap: () {
-                              setState(() {
-                                selectedIndex = index;
-                              });
-                            },
+                                // Inside the InkWell widget onTap callback
+                                onTap: () {
+                                  setState(() {
+                                    // selectedIndex = index;
+                                    currentImage = index;
+                                    animationController
+                                        .forward(from: 0.0)
+                                        .whenComplete(() {
+                                      previousImage = currentImage;
+                                    });
+                                  });
+                                },
                               ),
                           separatorBuilder: (context, index) => const SizedBox(
                                 width: 10.0,
@@ -200,15 +244,16 @@ context.read<AuthBloc>().add(GetProfileEvent());
                           itemCount: widget.productEntity.size.length),
                     ),
                     const VerticalSpace(1),
-                    Text('Description',
-                        style: Theme.of(context).textTheme.titleLarge,
-                        // style: getBlackText17b(context)
+                    Text(
+                      'Description',
+                      style: Theme.of(context).textTheme.titleLarge,
+                      // style: getBlackText17b(context)
                     ),
                     const VerticalSpace(1),
                     Text(
                       widget.productEntity.description,
                       maxLines: 3,
-                      style:Theme.of(context).textTheme.titleSmall,
+                      style: Theme.of(context).textTheme.titleSmall,
                       // style: getGreyText15(context),
                     ),
                     const VerticalSpace(1),
@@ -241,8 +286,8 @@ context.read<AuthBloc>().add(GetProfileEvent());
                             ),
                           )
                         : ReviewWidget(
-                      productId: widget.productEntity.productId,
-                      reviewId: widget.productEntity.reviews![0].reviewId,
+                            productId: widget.productEntity.productId,
+                            reviewId: widget.productEntity.reviews![0].reviewId,
                             userName: widget.productEntity.reviews![0].username,
                             review: widget.productEntity.reviews![0].review,
                             date: widget.productEntity.reviews![0].createdAt!,
@@ -257,9 +302,10 @@ context.read<AuthBloc>().add(GetProfileEvent());
                             // style: getBlackText15b(context),
                           ),
                           const Spacer(),
-                          BlocBuilder<AuthBloc,AuthState>(builder: (context,state){
-                            if(state is GettingProfileSuccessState){
-                              return  Text(
+                          BlocBuilder<AuthBloc, AuthState>(
+                              builder: (context, state) {
+                            if (state is GettingProfileSuccessState) {
+                              return Text(
                                 '\$ ${state.userEntity.totalPrice} ',
                                 style: Theme.of(context).textTheme.titleLarge,
                                 // style: getBlackText17b(context),
@@ -277,17 +323,42 @@ context.read<AuthBloc>().add(GetProfileEvent());
                   ],
                 ),
               ),
-              BottomButton(
-                  text: isExistInCart ? 'remove from cart' : 'Add to cart',
+              CartBottomButton(
+                isExistInCart: isExistInCart,
+                  text1: 'Add to cart',
+                  text2: 'Remove  from cart',
                   onPressed: () {
                     context.read<ProductBloc>().add(AddToCartEvent(
                         productId: widget.productEntity.productId));
-
                   }),
             ],
           ),
         ),
       ));
     });
+  }
+}
+
+class CustomPath extends CustomClipper<Path> {
+  final double value;
+
+  CustomPath({super.reclip, required this.value});
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return true;
+  }
+
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    // path.addRect(
+        // Rect.fromCircle(center: Offset(0, 0), radius: size.width * 2 * value));
+    path.addOval(Rect.fromCenter(
+      center: Offset(0,0),
+      width: size.width * 2 * value,
+      height: size.height * 2 * value,
+    ));
+    return path;
   }
 }
