@@ -1,6 +1,6 @@
 class EndPoints {
-  static String baseUrl = "https://ppjbw266u.pjbj596u.pjbw296u.a2hosted.com/api/";
-
+  // static String baseUrl = "https://ppjbw266u.pjbj596u.pjbw296u.a2hosted.com/api/";
+  static String baseUrl = "http://10.0.2.2:8000/api/";
   static String profile = "profile/";
   static String addingToWishList = "profile/favouriteuser";
   static String cart = "profile/cartuser";

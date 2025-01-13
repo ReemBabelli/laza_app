@@ -23,7 +23,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   List tax = [4.00, 5.00, 4.00, 2.00, 5.00, 2.00];
-  List num = [1, 2, 1, 1, 3, 1];
+  // List num = [1, 2, 1, 1, 3, 1];
 
   @override
   Widget build(BuildContext context) {
