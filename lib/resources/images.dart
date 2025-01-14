@@ -31,6 +31,7 @@ class Images {
   static const String heartBlack = 'assets/images/heart_black.svg';
   static const String heartWhite = 'assets/images/heart_white.svg';
   static const String infoCircleWhite = 'assets/images/info_circle_white.svg';
+  static const String loading = 'assets/images/loading.gif';
   static const String location = 'assets/images/location.jpg';
   static const String lock1 = 'assets/images/lock1.png';
   static const String lock2 = 'assets/images/lock2.png';

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -81,270 +80,276 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
       }
     }, builder: (context, state) {
       return SafeArea(
-        child: Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-            Stack(
+          child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-            Container(
-            color: dirtyWhiteColor,
-                child: Image.network(
-                  // widget.productEntity.productImages[selectedIndex].url!,
-                  widget.productEntity.productImages[previousImage].url!,
-                  fit: BoxFit.cover,
-                  width: SizeConfig.screenWidth,
-                  height: SizeConfig.screenWidth,
-                )),
-            AnimatedBuilder(
-                animation: animationController,
-                builder: (context, _) {
-                  return ClipPath(
-                    clipper: CustomPath(value: animationController.value),
-                    child: Container(
-                        color: dirtyWhiteColor,
-                        child: Image.network(
-                          // widget.productEntity.productImages[selectedIndex].url!,
-                          widget.productEntity.productImages[currentImage]
-                              .url!,
-                          fit: BoxFit.cover,
-                          width: SizeConfig.screenWidth,
-                          height: SizeConfig.screenWidth,
-                        )),
-                  );
-                }),
-            Positioned(
-              top: 30,
-              left: 30,
-              right: 30,
-              child: Row(
+              Stack(
                 children: [
-                const CircleAvatar(
-                backgroundColor: blueWhiteColor,
-                child: BackButton(
-                  color: Colors.black,
-                  // onPressed: () {
-                  //   context.pop();
-                  // },
+                  Container(
+                      color: dirtyWhiteColor,
+                      child: Image.network(
+                        // widget.productEntity.productImages[selectedIndex].url!,
+                        widget.productEntity.productImages[previousImage].url!,
+                        fit: BoxFit.cover,
+                        width: SizeConfig.screenWidth,
+                        height: SizeConfig.screenWidth,
+                      )),
+                  AnimatedBuilder(
+                      animation: animationController,
+                      builder: (context, _) {
+                        return ClipPath(
+                          clipper: CustomPath(value: animationController.value),
+                          child: Container(
+                              color: dirtyWhiteColor,
+                              child: Image.network(
+                                // widget.productEntity.productImages[selectedIndex].url!,
+                                widget.productEntity.productImages[currentImage]
+                                    .url!,
+                                fit: BoxFit.cover,
+                                width: SizeConfig.screenWidth,
+                                height: SizeConfig.screenWidth,
+                              )),
+                        );
+                      }),
+                  Positioned(
+                    top: 30,
+                    left: 30,
+                    right: 30,
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          backgroundColor: blueWhiteColor,
+                          child: BackButton(
+                            color: Colors.black,
+                            // onPressed: () {
+                            //   context.pop();
+                            // },
+                          ),
+                        ),
+                        Spacer(),
+                        AnimatedCrossFade(
+                          firstChild: InkWell(
+                            child: SvgPicture.asset(
+                              Images.heartFill,
+                              height: 30,
+                              width: 30,
+                              fit: BoxFit.cover,
+                            ),
+                            onTap: () {
+                              context.read<ProductBloc>().add(
+                                  AddToWishListEvent(
+                                      productId:
+                                          widget.productEntity.productId));
+                            },
+                          ),
+                          secondChild: InkWell(
+                            child: SvgPicture.asset(
+                              Images.heartThin,
+                              height: 30,
+                              width: 30,
+                              fit: BoxFit.cover,
+                            ),
+                            onTap: () {
+                              context.read<ProductBloc>().add(
+                                  AddToWishListEvent(
+                                      productId:
+                                          widget.productEntity.productId));
+                            },
+                          ),
+                          crossFadeState: isExistInWishlist
+                              ? CrossFadeState.showFirst
+                              : CrossFadeState.showSecond,
+                          duration: const Duration(milliseconds: 500),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: SizeConfig.defaultSize! * 30,
+                          child: Text(
+                            widget.productEntity.name,
+                            maxLines: 2,
+                            style: Theme.of(context).textTheme.headlineSmall,
+                            // style: getBlackTitle22b(context),
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          '\$ ${widget.productEntity.price}',
+                          style: Theme.of(context).textTheme.titleLarge,
+                          // style: getBlackText15(context),
+                        )
+                      ],
+                    ),
+                    const VerticalSpace(2),
+                    SizedBox(
+                      height: SizeConfig.defaultSize! * 7,
+                      child: ListView.separated(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) => InkWell(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffececec),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: FadeInImage.assetNetwork(
+                                    fit: BoxFit.contain,
+                                    width: 80,
+                                    height: 80,
+                                    placeholder: Images.loading,
+                                    image:  widget.productEntity.productImages[index]
+                                        .url!,
+                                  ),
+                                ),
+                                // Inside the InkWell widget onTap callback
+                                onTap: () {
+                                  setState(() {
+                                    // selectedIndex = index;
+                                    currentImage = index;
+                                    animationController
+                                        .forward(from: 0.0)
+                                        .whenComplete(() {
+                                      previousImage = currentImage;
+                                    });
+                                  });
+                                },
+                              ),
+                          separatorBuilder: (context, index) => const SizedBox(
+                                width: 10.0,
+                              ),
+                          itemCount: 5),
+                    ),
+                    const VerticalSpace(1),
+                    Row(
+                      children: [
+                        Text(
+                          'Size',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const Spacer(),
+                        Text(
+                          'Size Guide',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          // style: getGreyText13(context),
+                        )
+                      ],
+                    ),
+                    const VerticalSpace(1),
+                    SizedBox(
+                      height: SizeConfig.defaultSize! * 7,
+                      child: ListView.separated(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) => SizeWidget(
+                              size: widget.productEntity.size[index]),
+                          separatorBuilder: (context, index) => const SizedBox(
+                                width: 10.0,
+                              ),
+                          itemCount: widget.productEntity.size.length),
+                    ),
+                    const VerticalSpace(1),
+                    Text(
+                      'Description',
+                      style: Theme.of(context).textTheme.titleLarge,
+                      // style: getBlackText17b(context)
+                    ),
+                    const VerticalSpace(1),
+                    Text(
+                      widget.productEntity.description,
+                      maxLines: 3,
+                      style: Theme.of(context).textTheme.titleSmall,
+                      // style: getGreyText15(context),
+                    ),
+                    const VerticalSpace(1),
+                    Row(
+                      children: [
+                        Text(
+                          'Reviews',
+                          style: Theme.of(context).textTheme.titleLarge,
+                          // style: getBlackText17b(context),
+                        ),
+                        const Spacer(),
+                        TextButton(
+                            onPressed: () {
+                              context.pushNamed(MyRouter2.reviews,
+                                  extra: widget.productEntity);
+                            },
+                            child: Text(
+                              'view all',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              // style: getGreyText13(context),
+                            ))
+                      ],
+                    ),
+                    const VerticalSpace(1),
+                    widget.productEntity.reviews!.isEmpty
+                        ? Center(
+                            child: Text(
+                              "No reviews yet",
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          )
+                        : ReviewWidget(
+                            productId: widget.productEntity.productId,
+                            reviewId: widget.productEntity.reviews![0].reviewId,
+                            userName: widget.productEntity.reviews![0].username,
+                            review: widget.productEntity.reviews![0].review,
+                            date: widget.productEntity.reviews![0].createdAt!,
+                            rating: 4.5),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Total Price',
+                            style: Theme.of(context).textTheme.titleLarge,
+                            // style: getBlackText15b(context),
+                          ),
+                          const Spacer(),
+                          BlocBuilder<AuthBloc, AuthState>(
+                              builder: (context, state) {
+                            if (state is GettingProfileSuccessState) {
+                              return Text(
+                                '\$ ${state.userEntity.totalPrice} ',
+                                style: Theme.of(context).textTheme.titleLarge,
+                                // style: getBlackText17b(context),
+                              );
+                            }
+                            return CircularProgressIndicator();
+                          })
+                          // Text(
+                          //   '\$ ${widget.totalPrice} ',
+                          //   style: getBlackText17b(context),
+                          // )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Spacer(),
-              AnimatedCrossFade(
-                  firstChild: InkWell(
-                    child: SvgPicture.asset(
-                      Images.heartFill,
-                      height: 30,
-                      width: 30,
-                      fit: BoxFit.cover,
-                    ),
-                    onTap: () {
-                      context.read<ProductBloc>().add(AddToWishListEvent(
-                          productId: widget.productEntity.productId));
-                    },
-                  ),
-                  secondChild: InkWell(
-                    child: SvgPicture.asset(
-                      Images.heartThin,
-                      height: 30,
-                      width: 30,
-                      fit: BoxFit.cover,
-                    ),
-                    onTap: () {
-                      context.read<ProductBloc>().add(AddToWishListEvent(
-                          productId: widget.productEntity.productId));
-                    },
-                  ),
-                  crossFadeState: isExistInWishlist ? CrossFadeState.showFirst : CrossFadeState.
-                  showSecond,
-                  duration: const Duration(milliseconds: 500),
-            ),
+              CartBottomButton(
+                  isExistInCart: isExistInCart,
+                  text1: 'Add to cart',
+                  text2: 'Remove  from cart',
+                  onPressed: () {
+                    context.read<ProductBloc>().add(AddToCartEvent(
+                        productId: widget.productEntity.productId));
+                  }),
             ],
           ),
         ),
-        ],
-      ),
-      Padding(
-      padding: const EdgeInsets.all(15),
-      child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-      Row(
-      children: [
-      Container(
-      width: SizeConfig.defaultSize! * 30,
-      child: Text(
-      widget.productEntity.name,
-      maxLines: 2,
-      style: Theme.of(context).textTheme.headlineSmall,
-      // style: getBlackTitle22b(context),
-      ),
-      ),
-      const Spacer(),
-      Text(
-      '\$ ${widget.productEntity.price}',
-      style: Theme.of(context).textTheme.titleLarge,
-      // style: getBlackText15(context),
-      )
-      ],
-      ),
-      const VerticalSpace(2),
-      SizedBox(
-      height: SizeConfig.defaultSize! * 7,
-      child: ListView.separated(
-      shrinkWrap: true,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) => InkWell(
-      child: Container(
-      decoration: BoxDecoration(
-      color: const Color(0xffececec),
-      borderRadius: BorderRadius.circular(15),
-      ),
-      child: Image.network(
-      widget.productEntity.productImages[index]
-          .url!,
-      fit: BoxFit.contain,
-      width: 80,
-      height: 80,
-      ),
-      ),
-      // Inside the InkWell widget onTap callback
-      onTap: () {
-      setState(() {
-      // selectedIndex = index;
-      currentImage = index;
-      animationController
-          .forward(from: 0.0)
-          .whenComplete(() {
-      previousImage = currentImage;
-      });
-      });
-      },
-      ),
-      separatorBuilder: (context, index) => const SizedBox(
-      width: 10.0,
-      ),
-      itemCount: 5),
-      ),
-      const VerticalSpace(1),
-      Row(
-      children: [
-      Text(
-      'Size',
-      style: Theme.of(context).textTheme.titleLarge,
-      ),
-      const Spacer(),
-      Text(
-      'Size Guide',
-      style: Theme.of(context).textTheme.bodyMedium,
-      // style: getGreyText13(context),
-      )
-      ],
-      ),
-      const VerticalSpace(1),
-      SizedBox(
-      height: SizeConfig.defaultSize! * 7,
-      child: ListView.separated(
-      shrinkWrap: true,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) => SizeWidget(
-      size: widget.productEntity.size[index]),
-      separatorBuilder: (context, index) => const SizedBox(
-      width: 10.0,
-      ),
-      itemCount: widget.productEntity.size.length),
-      ),
-      const VerticalSpace(1),
-      Text(
-      'Description',
-      style: Theme.of(context).textTheme.titleLarge,
-      // style: getBlackText17b(context)
-      ),
-      const VerticalSpace(1),
-      Text(
-      widget.productEntity.description,
-      maxLines: 3,
-      style: Theme.of(context).textTheme.titleSmall,
-      // style: getGreyText15(context),
-      ),
-      const VerticalSpace(1),
-      Row(
-      children: [
-      Text(
-      'Reviews',
-      style: Theme.of(context).textTheme.titleLarge,
-      // style: getBlackText17b(context),
-      ),
-      const Spacer(),
-      TextButton(
-      onPressed: () {
-      context.pushNamed(MyRouter2.reviews,
-      extra: widget.productEntity);
-      },
-      child: Text(
-      'view all',
-      style: Theme.of(context).textTheme.bodyMedium,
-      // style: getGreyText13(context),
-      ))
-      ],
-      ),
-      const VerticalSpace(1),
-      widget.productEntity.reviews!.isEmpty
-      ? Center(
-      child: Text(
-      "No reviews yet",
-      style: Theme.of(context).textTheme.titleSmall,
-      ),
-      )
-          : ReviewWidget(
-      productId: widget.productEntity.productId,
-      reviewId: widget.productEntity.reviews![0].reviewId,
-      userName: widget.productEntity.reviews![0].username,
-      review: widget.productEntity.reviews![0].review,
-      date: widget.productEntity.reviews![0].createdAt!,
-      rating: 4.5),
-      Padding(
-      padding: const EdgeInsets.all(10),
-      child: Row(
-      children: [
-      Text(
-      'Total Price',
-      style: Theme.of(context).textTheme.titleLarge,
-      // style: getBlackText15b(context),
-      ),
-      const Spacer(),
-      BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, state) {
-      if (state is GettingProfileSuccessState) {
-      return Text(
-      '\$ ${state.userEntity.totalPrice} ',
-      style: Theme.of(context).textTheme.titleLarge,
-      // style: getBlackText17b(context),
-      );
-      }
-      return CircularProgressIndicator();
-      })
-      // Text(
-      //   '\$ ${widget.totalPrice} ',
-      //   style: getBlackText17b(context),
-      // )
-      ],
-      ),
-      ),
-      ],
-      ),
-      ),
-      CartBottomButton(
-      isExistInCart: isExistInCart,
-      text1: 'Add to cart',
-      text2: 'Remove  from cart',
-      onPressed: () {
-      context.read<ProductBloc>().add(AddToCartEvent(
-      productId: widget.productEntity.productId));
-      }),
-      ],
-      ),
-      ),
       ));
     });
   }

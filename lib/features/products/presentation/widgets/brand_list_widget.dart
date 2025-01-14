@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:laza_app/core/widgets/space_widget.dart';
 import 'package:laza_app/features/products/presentation/manager/product_bloc.dart';
+import 'package:laza_app/resources/resources.dart';
 
 class BrandListWidget extends StatelessWidget {
   final String image;
@@ -25,7 +26,13 @@ class BrandListWidget extends StatelessWidget {
                   color:Colors.white,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Image.network(image , fit: BoxFit.contain,width: 50 , height: 40,)),
+                child: FadeInImage.assetNetwork(
+                  fit: BoxFit.contain,
+                  width: 50 ,
+                  height: 40,
+                  placeholder: Images.loading,
+                  image: image,
+                )),
             const HorizontalSpace(1),
             Text(brandName,style: Theme.of(context).textTheme.labelLarge,)
           ],

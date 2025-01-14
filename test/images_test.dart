@@ -33,6 +33,7 @@ void main() {
     expect(File(Images.heartBlack).existsSync(), isTrue);
     expect(File(Images.heartWhite).existsSync(), isTrue);
     expect(File(Images.infoCircleWhite).existsSync(), isTrue);
+    expect(File(Images.loading).existsSync(), isTrue);
     expect(File(Images.location).existsSync(), isTrue);
     expect(File(Images.lock1).existsSync(), isTrue);
     expect(File(Images.lock2).existsSync(), isTrue);

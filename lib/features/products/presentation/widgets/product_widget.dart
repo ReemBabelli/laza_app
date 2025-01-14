@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:laza_app/features/products/presentation/manager/product_bloc.dart';
+import 'package:laza_app/resources/resources.dart';
 
 class ProductWidget extends StatelessWidget {
   final String productId;
@@ -44,12 +45,18 @@ class ProductWidget extends StatelessWidget {
                   color: const Color(0xffececec),
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Image.network(
-                  image,
-                  fit: BoxFit.contain,
-                  width: 100,
-                  height: 170,
-                ),
+                child: FadeInImage.assetNetwork(
+                    fit: BoxFit.contain,
+                    width: 100,
+                    height: 170,
+                    placeholder: Images.loading,
+                    image: image),
+                // child: Image.network(
+                //   image,
+                //   fit: BoxFit.contain,
+                //   width: 100,
+                //   height: 170,
+                // ),
               ),
               Padding(
                 padding: const EdgeInsets.all(5.0),
